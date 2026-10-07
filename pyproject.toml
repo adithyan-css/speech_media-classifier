@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai_rf2"
+version = "0.1.0"
+description = "ai_rf2 - speech vs music proof of concept for the RF2Digital-VIT AI Radio Announcement Classifier (ARA)"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: a real training or measurement run, tens of seconds. Skip with -m \"not slow\".",
+]

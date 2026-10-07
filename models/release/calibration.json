@@ -1,0 +1,8 @@
+{
+  "temperature": 1.330713221859643,
+  "threshold_logit": 0.21380342543125153,
+  "threshold_prob_uncalibrated": 0.5532481711158191,
+  "threshold_prob_calibrated": 0.5400808893206337,
+  "rule": "dev threshold maximising min(DR - 0.95, 0.05 - FAR)",
+  "alt_threshold_logit_far5": -3.138801097869873
+}

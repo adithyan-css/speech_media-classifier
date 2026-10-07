@@ -1,0 +1,39 @@
+{
+  "temperature": 1.330713221859643,
+  "programmes": 12,
+  "audio_hours": 1.65,
+  "window_auc": 0.9925187914248943,
+  "configured_theta_on": 0.8,
+  "event_at_config": {
+    "ta_events": 106,
+    "detected": 104,
+    "detection_rate": 0.9811320754716981,
+    "media_segments": 106,
+    "false_alarm_rate": 0.02830188679245283,
+    "false_alarms_per_hour": 3.552047360631475,
+    "latency_p50_s": 1.0,
+    "latency_p95_s": 2.0
+  },
+  "selected": {
+    "theta_on": 0.85,
+    "detection_rate": 0.9811320754716981,
+    "false_alarm_rate": 0.02830188679245283,
+    "false_alarms_per_hour": 3.552047360631475,
+    "latency_p50_s": 1.0,
+    "latency_p95_s": 2.0
+  },
+  "acceptance": {
+    "ac04_detection_rate": 0.95,
+    "ac05_false_alarm_rate": 0.05,
+    "ac04_met": true,
+    "ac05_met": true
+  },
+  "wallclock_latency_from_true_onset": {
+    "speech_segments": 119,
+    "asserted": 118,
+    "never_asserted": 1,
+    "p50_s": 2.519999999999982,
+    "p95_s": 4.0,
+    "max_s": 8.367999999999995
+  }
+}

@@ -1,0 +1,49 @@
+# AACARA default configuration - TRD section 10.3, verbatim.
+# Every constant in the codebase reads from this file (BUILD.md ground rule 1).
+# Values marked (tune) in the TRD are expected to move during M2-M3; when one moves,
+# change it here and record the change, never in code.
+
+audio:
+  sample_rate_in: 48000
+  channels: 2
+  bits: 16
+  sample_rate_work: 16000
+frontend:
+  dc_cutoff_hz: 20
+  resample_taps: 259
+  resample_passband_hz: 7600
+  resample_stopband_hz: 8400
+  resample_stopband_db: 60
+  resample_design_atten_db: 70
+  resample_ripple_db: 0.1
+  rms_target_dbfs: -26.0
+  max_gain_db: 20.0
+features:
+  n_fft: 512
+  win_length: 400
+  hop_length: 160
+  n_mels: 64
+  fmin: 50
+  fmax: 7600
+  window_seconds: 3.0
+  window_hop_seconds: 0.5
+vad:
+  enabled: true
+  voiced_ratio_gate: 0.15
+  frame_floor_dbfs: -50.0
+  frame_range_db: 35.0
+model:
+  path: models/aacara-cnn-v1-int8.tflite
+  num_threads: 1
+  cpu_affinity: 2
+decision:
+  theta_on: 0.80
+  theta_off: 0.40
+  confirm_n: 3
+  confirm_m: 4
+  min_flag_seconds: 3.0
+  hangover_seconds: 4.0
+  refractory_seconds: 2.0
+output:
+  socket_path: /run/aacara.sock
+  log_path: /var/log/aacara/decisions.jsonl

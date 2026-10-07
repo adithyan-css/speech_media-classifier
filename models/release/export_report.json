@@ -1,0 +1,85 @@
+{
+  "source_checkpoint": "models/cnn_s1/best.pt",
+  "files": {
+    "speech_music_fp32.onnx": 331186,
+    "speech_music_int8.onnx": 119877
+  },
+  "parity_fp32_vs_torch_max_abs_logit": 1.1444091796875e-05,
+  "int8_vs_fp32_decision_agreement": 0.999507874015748,
+  "int8_vs_fp32_logit_mae": 0.17925813794136047,
+  "test_fp32": {
+    "n": 18288,
+    "n_speech": 11950,
+    "n_media": 6338,
+    "auc": 0.9989539352857375,
+    "dr_at_far5": 0.9971548117154811,
+    "dr_at_far1": 0.9930543933054393,
+    "balanced_accuracy@0.5": 0.9895217265586731,
+    "accuracy@0.5": 0.9911964129483815,
+    "dr@0.5": 0.994979079497908,
+    "far@0.5": 0.01593562638056169,
+    "operating_point": {
+      "threshold_logit": 0.21380342543125153,
+      "threshold_prob": 0.5532481711158191,
+      "dr": 0.9945606694560669,
+      "far": 0.015304512464499842,
+      "accuracy": 0.9911417322834646,
+      "balanced_accuracy": 0.9896280784957836,
+      "tp": 11885,
+      "fn": 65,
+      "fp": 97,
+      "tn": 6241
+    }
+  },
+  "test_int8": {
+    "n": 18288,
+    "n_speech": 11950,
+    "n_media": 6338,
+    "auc": 0.9989591901672981,
+    "dr_at_far5": 0.9971548117154811,
+    "dr_at_far1": 0.9927196652719665,
+    "balanced_accuracy@0.5": 0.9892013768317818,
+    "accuracy@0.5": 0.990923009623797,
+    "dr@0.5": 0.9948117154811715,
+    "far@0.5": 0.016408961817608078,
+    "operating_point": {
+      "threshold_logit": 0.21380342543125153,
+      "threshold_prob": 0.5532481711158191,
+      "dr": 0.9943933054393306,
+      "far": 0.01451562006942253,
+      "accuracy": 0.9913057742782152,
+      "balanced_accuracy": 0.989938842684954,
+      "tp": 11883,
+      "fn": 67,
+      "fp": 92,
+      "tn": 6246
+    }
+  },
+  "latency_x86_1thread": {
+    "fp32": {
+      "mean_ms": 0.40253443339679507,
+      "p50_ms": 0.3141020006296458,
+      "p95_ms": 0.8021444502446685
+    },
+    "int8": {
+      "mean_ms": 0.36419055670800543,
+      "p50_ms": 0.354597000296053,
+      "p95_ms": 0.460127951373579
+    },
+    "features": {
+      "mean_ms": 14.858807283326314,
+      "p95_ms": 10.940790800032117,
+      "note": "Python/numpy reference features; the AAC_RF2 C++ port computes them incrementally"
+    }
+  },
+  "calibration": {
+    "temperature": 1.330713221859643,
+    "threshold_logit": 0.21380342543125153,
+    "threshold_prob_uncalibrated": 0.5532481711158191,
+    "threshold_prob_calibrated": 0.5400808893206337,
+    "rule": "dev threshold maximising min(DR - 0.95, 0.05 - FAR)",
+    "alt_threshold_logit_far5": -3.138801097869873
+  },
+  "rtf_x86_1thread": 0.030445995680068637,
+  "note": "Latency measured on the x86-64 cloud CPU used for training, one thread. Cortex-A73 numbers must be measured on the ODROID N2+ (AAC_RF2 scripts/benchmark_n2plus.sh)."
+}

@@ -1,0 +1,50 @@
+{
+  "programme_00": {
+    "programme": "programme_00",
+    "minutes": 8.45,
+    "speech_segments": 10,
+    "speech_detected": 10,
+    "media_segments": 9,
+    "media_false_alarms": 0,
+    "median_latency_s": 2.54,
+    "processing_s": 34.7,
+    "real_time_factor": 0.069,
+    "windows": 1008,
+    "flag_transitions": 19,
+    "backend": "PyTorch 2.14.0+cpu FP32 (CPU)  |  speech_music_best.pt (344 KB)",
+    "int8_agreement": {
+      "window_agreement": 0.9990079365079365,
+      "max_abs_prob_diff": 0.13029193071346745,
+      "identical_flag_timeline": false,
+      "flag_changes": [
+        19,
+        19
+      ],
+      "largest_flag_timing_difference_s": 1.5
+    }
+  },
+  "programme_01": {
+    "programme": "programme_01",
+    "minutes": 8.37,
+    "speech_segments": 11,
+    "speech_detected": 11,
+    "media_segments": 12,
+    "media_false_alarms": 0,
+    "median_latency_s": 2.46,
+    "processing_s": 32.0,
+    "real_time_factor": 0.064,
+    "windows": 999,
+    "flag_transitions": 22,
+    "backend": "PyTorch 2.14.0+cpu FP32 (CPU)  |  speech_music_best.pt (344 KB)",
+    "int8_agreement": {
+      "window_agreement": 0.994994994994995,
+      "max_abs_prob_diff": 0.13634701827881274,
+      "identical_flag_timeline": true,
+      "flag_changes": [
+        22,
+        22
+      ],
+      "largest_flag_timing_difference_s": 0.0
+    }
+  }
+}

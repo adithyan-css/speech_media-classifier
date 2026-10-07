@@ -1,0 +1,209 @@
+ai_rf2 self-test  2026-09-25 01:14
+python 3.12.3 (/home/adithyan/.venvs/ai_rf2/bin/python)
+system Linux 6.6.87.2-microsoft-standard-WSL2 x86_64, 12 logical CPUs
+
+----- environment: /mnt/c/Users/adith/OneDrive/Desktop/ai_rf2/scripts/check_env.py
+python   3.12.3  (/home/adithyan/.venvs/ai_rf2/bin/python)
+platform Linux 6.6.87.2-microsoft-standard-WSL2 x86_64
+  [ok]      torch        2.14.0+cpu   [CPU only (no CUDA device visible)]
+  [ok]      numpy        2.5.3
+  [ok]      scipy        1.18.1
+  [ok]      soundfile    0.14.0
+  [ok]      librosa      1.0.0
+  [ok]      yaml         6.0.1
+  [ok]      sklearn      1.9.1
+  [ok]      matplotlib   3.11.2
+  [ok]      onnx         1.23.0
+  [ok]      onnxruntime  1.30.0
+  [ok]      sounddevice  0.5.6
+  [ok]      pytest       9.1.1
+  [ok     ] ffmpeg       /usr/bin/ffmpeg (with MP3 encoder)  - optional: MP3 augmentation when retraining, unusual audio formats
+  [ok     ] GUI toolkit  tkinter
+
+all packages present
+(exit code 0, 5.4 s)
+
+----- unit tests: -m pytest /mnt/c/Users/adith/OneDrive/Desktop/ai_rf2/tests -q -m not slow -p no:cacheprovider --junitxml=/mnt/c/Users/adith/OneDrive/Desktop/ai_rf2/reports/tests_linux.xml
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 48%]
+........................................................................ [ 57%]
+........................................................................ [ 67%]
+........................................................................ [ 77%]
+........................................................................ [ 86%]
+.............X.......................................................... [ 96%]
+.........................                                                [100%]
+744 passed, 1 deselected, 1 xpassed in 73.51s (0:01:13)
+(exit code 0, 74.1 s)
+
+----- models: -c import numpy as np;from ai_rf2.runtime import make_scorer;rng=np.random.default_rng(0);m=rng.standard_normal((1,64,298)).astype('float32');d=np.abs(rng.standard_normal(8)).astype('float32');t,dt_,_=make_scorer('torch');o,do,_=make_scorer('onnx');print(dt_);print(do);print('logits',round(t(m,d),3),round(o(m,d),3))
+PyTorch 2.14.0+cpu FP32 (CPU)  |  speech_music_best.pt (344 KB)
+ONNX Runtime INT8  |  speech_music_int8.onnx (117 KB)
+logits -11.613 -11.445
+(exit code 0, 4.8 s)
+
+----- report demo: -m ai_rf2.demo --backend torch --compare
+model: PyTorch 2.14.0+cpu FP32 (CPU)  |  speech_music_best.pt (344 KB)
+calibration temperature 1.331; decision layer: θ_on 0.8, θ_off 0.4, 3-of-4 confirm, 4.0 s hangover
+
+=== programme_00 ===
+input: programme_00_48k_stereo.flac | 48000 Hz, 2 ch, int16 | 8.4 min
+ #       time (s)  truth                                          model                  ok
+ 0     0.0-  10.6  SPEECH read audiobook [en]                     flag up after 4.0 s    OK
+ 1    10.6-  40.7  MEDIA  music classical                         stayed quiet           OK
+ 2    40.7-  60.9  SPEECH read audiobook [es] + music bed 19 dB   flag up after 2.3 s    OK
+ 3    60.9-  90.9  MEDIA  music classical                         stayed quiet           OK
+ 4    90.9- 102.2  SPEECH read audiobook [es]                     flag up after 2.1 s    OK
+ 5   102.2- 132.2  MEDIA  music rock                              stayed quiet           OK
+ 6   132.2- 163.2  SPEECH read audiobook [en] + music bed 20 dB   flag up after 3.3 s    OK
+ 7   163.2- 190.0  MEDIA  music disco                             stayed quiet           OK
+ 8   190.0- 221.1  SPEECH read audiobook [ru] + music bed 15 dB   flag up after 2.5 s    OK
+ 9   221.1- 251.1  MEDIA  music country                           stayed quiet           OK
+10   251.1- 268.2  SPEECH read audiobook [es] + music bed 16 dB   flag up after 3.9 s    OK
+11   268.2- 298.2  MEDIA  music pop                               stayed quiet           OK
+12   298.2- 329.2  SPEECH read audiobook [en]                     flag up after 2.8 s    OK
+13   329.2- 359.2  MEDIA  music pop                               stayed quiet           OK
+14   359.2- 388.8  SPEECH read audiobook [fr]                     flag up after 2.3 s    OK
+15   388.8- 418.8  MEDIA  music hiphop                            stayed quiet           OK
+16   418.8- 445.9  SPEECH read audiobook [de] + music bed 19 dB   flag up after 2.2 s    OK
+17   445.9- 475.9  MEDIA  music classical                         stayed quiet           OK
+18   475.9- 506.8  SPEECH read audiobook [en]                     flag up after 2.6 s    OK
+-> speech detected 10/10, false alarms 0/9, median latency 2.54 s, processed 8.4 min in 34.7 s (RTF 0.069)
+   timeline figure: reports/demo/programme_00_timeline.png
+   8-bit ONNX vs reference: window decisions agree 99.90%, max |dP| 0.130; same 19 flag changes, largest timing difference 1.5 s
+
+=== programme_01 ===
+input: programme_01_48k_stereo.flac | 48000 Hz, 2 ch, int16 | 8.4 min
+ #       time (s)  truth                                          model                  ok
+ 0     0.0-  31.6  SPEECH podcast conversation [de]               flag up after 4.0 s    OK
+ 1    31.6-  38.2  MEDIA  singing scales                          stayed quiet           OK
+ 2    38.2-  54.9  SPEECH read audiobook [de]                     flag up after 2.3 s    OK
+ 3    54.9-  81.9  MEDIA  music rock                              stayed quiet           OK
+ 4    81.9-  97.5  SPEECH read encyclopedia [de] + music bed 9 dB flag up after 2.6 s    OK
+ 5    97.5- 127.5  MEDIA  music classical                         stayed quiet           OK
+ 6   127.5- 144.8  SPEECH read audiobook [de] + music bed 9 dB    flag up after 2.5 s    OK
+ 7   144.8- 166.1  MEDIA  music disco                             stayed quiet           OK
+ 8   166.1- 200.3  SPEECH read audiobook [fr] + music bed 16 dB   flag up after 2.4 s    OK
+ 9   200.3- 230.3  MEDIA  music disco                             stayed quiet           OK
+10   230.3- 248.6  SPEECH read audiobook [de]                     flag up after 2.2 s    OK
+11   248.6- 254.0  MEDIA  singing scales                          stayed quiet           OK
+12   254.0- 265.2  SPEECH acted emotional [en]                    flag up after 2.5 s    OK
+13   265.2- 285.7  MEDIA  music rock                              stayed quiet           OK
+14   285.7- 316.7  SPEECH read audiobook [en] + music bed 7 dB    flag up after 2.8 s    OK
+15   316.7- 346.7  MEDIA  music pop                               stayed quiet           OK
+16   346.7- 383.9  SPEECH podcast conversation [de]               flag up after 2.3 s    OK
+17   383.9- 407.3  MEDIA  music reggae                            stayed quiet           OK
+18   407.3- 426.3  SPEECH read encyclopedia [de]                  flag up after 3.2 s    OK
+19   426.3- 434.1  MEDIA  singing arpeggios                       stayed quiet           OK
+20   434.1- 464.1  MEDIA  music pop                               stayed quiet           OK
+21   464.1- 472.3  SPEECH read sentence [de] + music bed 14 dB    flag up after 2.9 s    OK
+22   472.3- 502.3  MEDIA  music jazz                              stayed quiet           OK
+-> speech detected 11/11, false alarms 0/12, median latency 2.46 s, processed 8.4 min in 32.0 s (RTF 0.064)
+   timeline figure: reports/demo/programme_01_timeline.png
+   8-bit ONNX vs reference: window decisions agree 99.50%, max |dP| 0.136; same 22 flag changes, largest timing difference 0.0 s
+
+TOTAL: speech detected 21/21, false alarms 0/21. Results saved to reports/demo/demo_results.json
+(exit code 0, 200.0 s)
+
+----- classify file: -m ai_rf2.infer /mnt/c/Users/adith/OneDrive/Desktop/ai_rf2/data/samples/programme_01_48k_stereo.flac
+model: PyTorch 2.14.0+cpu FP32 (CPU)  |  speech_music_best.pt (344 KB)
+programme_01_48k_stereo.flac: 999 windows, 488 scored SPEECH (p >= 0.8)
+  (decided at = end of the window that triggered the change, i.e. real time in the file)
+  decided at      4.0 s  ASSERT  (speech)  window 1.0-4.0 s  confidence 1.00
+  decided at     37.0 s  RELEASE (media)   window 34.0-37.0 s  confidence 0.01
+  decided at     40.5 s  ASSERT  (speech)  window 37.5-40.5 s  confidence 0.79
+  decided at     61.5 s  RELEASE (media)   window 58.5-61.5 s  confidence 0.07
+  decided at     84.5 s  ASSERT  (speech)  window 81.5-84.5 s  confidence 0.94
+  decided at    103.0 s  RELEASE (media)   window 100.0-103.0 s  confidence 0.00
+  decided at    130.0 s  ASSERT  (speech)  window 127.0-130.0 s  confidence 0.76
+  decided at    150.0 s  RELEASE (media)   window 147.0-150.0 s  confidence 0.00
+  decided at    168.5 s  ASSERT  (speech)  window 165.5-168.5 s  confidence 0.81
+  decided at    209.0 s  RELEASE (media)   window 206.0-209.0 s  confidence 0.03
+  decided at    232.5 s  ASSERT  (speech)  window 229.5-232.5 s  confidence 0.72
+  decided at    254.0 s  RELEASE (media)   window 251.0-254.0 s  confidence 0.00
+  decided at    256.5 s  ASSERT  (speech)  window 253.5-256.5 s  confidence 0.88
+  decided at    271.0 s  RELEASE (media)   window 268.0-271.0 s  confidence 0.02
+  decided at    288.5 s  ASSERT  (speech)  window 285.5-288.5 s  confidence 0.71
+  decided at    322.5 s  RELEASE (media)   window 319.5-322.5 s  confidence 0.00
+  decided at    349.0 s  ASSERT  (speech)  window 346.0-349.0 s  confidence 0.75
+  decided at    398.5 s  RELEASE (media)   window 395.5-398.5 s  confidence 0.06
+  decided at    410.5 s  ASSERT  (speech)  window 407.5-410.5 s  confidence 0.89
+  decided at    432.5 s  RELEASE (media)   window 429.5-432.5 s  confidence 0.00
+  decided at    467.0 s  ASSERT  (speech)  window 464.0-467.0 s  confidence 0.92
+  decided at    478.5 s  RELEASE (media)   window 475.5-478.5 s  confidence 0.00
+(exit code 0, 38.6 s)
+
+----- live (torch, console): -m ai_rf2.live --headless --speed 0 --seconds 90 --backend torch
+Live: programme_00_48k_stereo.flac
+silent, as fast as possible   |   model: PyTorch 2.14.0+cpu FP32 (CPU)  |  speech_music_best.pt (344 KB)   |   3 s window every 0.5 s -> decision layer
+      4.0 s  flag ON  (confidence 1.00)
+     20.5 s  flag OFF  (confidence 0.01)
+     43.0 s  flag ON  (confidence 0.89)
+     67.0 s  flag OFF  (confidence 0.00)
+
+--- summary: 90.0 s of audio, 175 decisions, 4 flag changes, analysis 35.8 ms per 0.5 s step (= 0.072 x real time) ---
+  vs ground truth: speech detected 2/2, false alarms 0/1
+(exit code 0, 15.6 s)
+
+----- live (onnx, console): -m ai_rf2.live --headless --speed 0 --seconds 90 --backend onnx
+Live: programme_00_48k_stereo.flac
+silent, as fast as possible   |   model: ONNX Runtime INT8  |  speech_music_int8.onnx (117 KB)   |   3 s window every 0.5 s -> decision layer
+      4.0 s  flag ON  (confidence 1.00)
+     19.0 s  flag OFF  (confidence 0.01)
+     43.0 s  flag ON  (confidence 0.88)
+     67.0 s  flag OFF  (confidence 0.00)
+
+--- summary: 90.0 s of audio, 175 decisions, 4 flag changes, analysis 30.3 ms per 0.5 s step (= 0.061 x real time) ---
+  vs ground truth: speech detected 2/2, false alarms 0/1
+(exit code 0, 11.7 s)
+
+----- sound device: -c import numpy as np,sounddevice as sd;print('output:',sd.query_devices(kind='output')['name']);ins=[d['name'] for d in sd.query_devices() if d['max_input_channels']>0];print('inputs:',len(ins));sd.play(np.zeros((48000,2),dtype='int16'),48000,blocking=True);print('silent playback ok')
+output: default
+inputs: 2
+silent playback ok
+(exit code 0, 1.4 s)
+
+----- microphone: -m ai_rf2.live --mic --headless --seconds 6
+Live: microphone / line-in
+listening on 'default' (48000 Hz, 2 ch)   |   model: PyTorch 2.14.0+cpu FP32 (CPU)  |  speech_music_best.pt (344 KB)   |   3 s window every 0.5 s -> decision layer
+
+--- summary: 6.2 s of audio, 7 decisions, 0 flag changes, analysis 92.7 ms per 0.5 s step (= 0.185 x real time) ---
+(exit code 0, 12.3 s)
+
+----- GUI toolkit: -c import importlib,sys
+for m in ('tkinter','PyQt5','PyQt6','PySide6'):
+    try:
+        importlib.import_module(m); print(m); sys.exit(0)
+    except Exception: pass
+sys.exit(1)
+tkinter
+(exit code 0, 0.2 s)
+
+----- live window: -m ai_rf2.live --programme 1 --no-sound --close-after 35 --snapshot /mnt/c/Users/adith/OneDrive/Desktop/ai_rf2/reports/selftest_live_window_linux.png
+Live: programme_01_48k_stereo.flac
+silent, real-time pace   |   model: PyTorch 2.14.0+cpu FP32 (CPU)  |  speech_music_best.pt (344 KB)   |   3 s window every 0.5 s -> decision layer
+[window] snapshot saved to /mnt/c/Users/adith/OneDrive/Desktop/ai_rf2/reports/selftest_live_window_linux.png
+
+--- summary: 40.3 s of audio, 75 decisions, 2 flag changes, analysis 84.4 ms per 0.5 s step (= 0.169 x real time) ---
+      4.0 s  flag ON   (confidence 1.00)
+     37.0 s  flag OFF  (confidence 0.01)
+  vs ground truth: speech detected 1/1, false alarms 0/1
+(exit code 0, 45.6 s)
+
+==============================================================================
+SELF-TEST SUMMARY (Linux x86_64)
+==============================================================================
+  PASS  Python packages present                 all required packages import
+  PASS  Automatic tests                         744 passed, 1 deselected, 1 xpassed in 73.51s (0:01:13)
+  PASS  PyTorch model + 8-bit ONNX model load   logits -11.613 -11.445
+  PASS  Report demo (SSOW 95 % / 5 % check)     speech 21/21 detected, false alarms 0/21, real-time factor 0.069
+  PASS  Classify an audio file                  11 speech detections, 39 s
+  PASS  Live pipeline, torch engine             vs ground truth: speech detected 2/2, false alarms 0/1
+  PASS  Live pipeline, onnx engine              vs ground truth: speech detected 2/2, false alarms 0/1
+  PASS  Sound device (silent check)             output: default | inputs: 2 | silent playback ok
+  PASS  Microphone / line-in (6 s, not stored)  summary: 6.2 s of audio,  7 decisions
+  PASS  Live window (35 s, no sound)            picture saved: reports/selftest_live_window_linux.png
+
+10/10 checks passed.  Log: reports/selftest_linux.log
